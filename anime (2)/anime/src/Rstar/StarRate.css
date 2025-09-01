@@ -1,0 +1,30 @@
+.star-rating{
+    display: flex;
+    gap: 3px;
+    background-color: black;
+    margin-left: 10px;
+    margin-right:96% ;
+    padding-left: 10px;
+}
+.star-rating button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+.stars{
+    font-size: 32px;
+    color: gray;
+    transition: color 0.3s ,text-shadow 0.3s;
+}
+.stars.active{
+    color: yellow;
+    filter: drop-shadow(0 0 3px red);
+}
+.stars.howeverd{
+    color: green;
+    text-shadow: 0 0 2px blue;
+}
+.star-rating button:hover .star{
+    transform: scale(1.1);
+}
