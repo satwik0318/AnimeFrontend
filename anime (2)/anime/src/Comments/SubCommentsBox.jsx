@@ -4,6 +4,8 @@ import { useOpenReply } from './Message/Message';
 import { useMainContext } from './Context/Context';
 import axios from 'axios';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const SubCommentsBox = (props) => {
   const { setMessageUpdate } = useMainContext();
   const changeOpenReply = useOpenReply();
@@ -30,7 +32,7 @@ const SubCommentsBox = (props) => {
   const sendComment = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:5000/new-sub-comment', {
+      await axios.post(`${backendUrl}/new-sub-comment`, {
         messageId: props.parentKey,
         messageData: message.current.value,
       });
