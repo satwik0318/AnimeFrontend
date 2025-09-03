@@ -8,6 +8,8 @@ export function useOpenReply() {
   return useContext(showReply);
 }
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const SubMessage = (props) => {
   const { setMessageUpdate } = useMainContext();
   const likeIcon = useRef();
@@ -37,7 +39,7 @@ const SubMessage = (props) => {
     likeIcon.current.style.color = alreadyLiked ? 'gray' : '#4688de';
 
     try {
-      await axios.post('http://localhost:5000/like-comment', {
+      await axios.post(`${backendUrl}/like-comment`, {
         commentId: props.subId,
         isSubComment: true,
         parentId: props.parentKey,
@@ -57,7 +59,7 @@ const SubMessage = (props) => {
   };
 
   const deleteMessage = async () => {
-    await axios.post('http://localhost:5000/delete-sub-comments', {
+    await axios.post(`${backendUrl}/delete-sub-comments`, {
       messageId: props.parentKey,
       subId: props.subId,
     });
