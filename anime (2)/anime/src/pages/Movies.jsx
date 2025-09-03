@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AnimeCard from "../components/AnimeCard";
 import Pagination from "../components/Pagination";
-import "../components/AnimePages.css"
+import "../components/AnimePages.css";
 
 const Movies = () => {
   const [animeList, setAnimeList] = useState([]);
@@ -10,21 +11,24 @@ const Movies = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
 
+  // ✅ backend URL from .env
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const fetchMoviesAnime = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/anime/movies?page=${page}`);
-      const result = await response.json();
-     
+      const response = await axios.get(`${backendUrl}/api/anime/movies?page=${page}`);
+      const result = response.data;
+
       if (result.success && result.data?.data) {
         setAnimeList(result.data.data);
         setCurrentPage(result.currentPage);
         setHasNextPage(result.hasNextPage);
       } else {
-        setError('Failed to fetch movies anime');
+        setError("Failed to fetch movies anime");
       }
     } catch (err) {
-      setError('Network error occurred');
+      setError("Network error occurred");
     } finally {
       setLoading(false);
     }
@@ -36,7 +40,7 @@ const Movies = () => {
 
   const handlePageChange = (page) => {
     fetchMoviesAnime(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading && currentPage === 1) {
@@ -55,16 +59,16 @@ const Movies = () => {
   return (
     <div className="anime-page">
       <h1 className="page-title">Anime Movies - Page {currentPage}</h1>
-      
+
       {loading && <div className="loading-overlay">Loading...</div>}
-      
+
       <div className="anime-grid">
         {animeList.map((anime) => (
           <AnimeCard key={anime.mal_id} anime={anime} />
         ))}
       </div>
-      
-      <Pagination 
+
+      <Pagination
         currentPage={currentPage}
         hasNextPage={hasNextPage}
         onPageChange={handlePageChange}
@@ -73,4 +77,5 @@ const Movies = () => {
     </div>
   );
 };
+
 export default Movies;
