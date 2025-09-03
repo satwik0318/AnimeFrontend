@@ -3,6 +3,8 @@ import "./TopCommentsBox.css";
 import { useMainContext } from "./Context/Context";
 import axios from "axios";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const TopComments = (props) => {
   const { setMessageReset, setCommentIncrement, setForceRefresh } = useMainContext();
   const message = useRef(null);
@@ -30,7 +32,7 @@ const TopComments = (props) => {
     if (!value) return;
 
     try {
-      await axios.post("http://localhost:5000/new-comment", {
+      await axios.post(`${backendUrl}/new-comment`, {
         messageData: value
       });
       message.current.value = '';
