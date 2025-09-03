@@ -9,7 +9,7 @@ const showReply = React.createContext();
 export function useOpenReply() {
   return useContext(showReply);
 }
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const Message = (props) => {
   const { setMessageUpdate } = useMainContext();
   const likeIcon = useRef();
@@ -17,7 +17,7 @@ const Message = (props) => {
   const [openReply, setOpenReply] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
-
+  
   const toggleReplyBox = () => setOpenReply((prev) => !prev);
   const toggleArrow = () => setArrowUp((prev) => !prev);
 
@@ -39,7 +39,7 @@ const Message = (props) => {
     likeIcon.current.style.color = alreadyLiked ? 'gray' : '#4688de';
 
     try {
-      await axios.post('http://localhost:5000/like-comment', {
+      await axios.post(`${backendUrl}/like-comment`, {
         commentId: props.useKey,
         increment: inc
       });
@@ -56,7 +56,7 @@ const Message = (props) => {
   };
 
   const deleteMessage = async () => {
-    await axios.post('http://localhost:5000/delete-comment', {
+    await axios.post(`${backendUrl}/delete-comment`, {
       messageId: props.useKey
     });
     setMessageUpdate([2, props.useKey]);
