@@ -3,6 +3,8 @@ import axios from 'axios';
 import Message from './Message/Message';
 import { useMainContext } from './Context/Context';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function MessageScroll() {
   const {
     messageReset,
@@ -20,7 +22,7 @@ function MessageScroll() {
 
   const loadInitialComments = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/comments?skip=0&limit=10`);
+      const res = await axios.get(`${backendUrl}/comments?skip=0&limit=10`);
       setMessages(res.data);
       setLoading(false);
       setCommentIncrement(res.data.length);
@@ -44,7 +46,7 @@ function MessageScroll() {
   useEffect(() => {
     if (messageUpdate?.[0] === 1) {
       axios
-        .post('http://localhost:5000/update-comment', {
+        .post(`${backendUrl}/update-comment`, {
           commentId: messageUpdate[1],
         })
         .then((res) => {
@@ -68,7 +70,7 @@ function MessageScroll() {
       const first = entries[0];
       if (first.isIntersecting) {
         try {
-          const res = await axios.post('http://localhost:5000/get-more-data', {
+          const res = await axios.post(`${backendUrl}/get-more-data`, {
             commentIncrement: commentIncrementRef.current,
           });
           const newComments = res.data;
